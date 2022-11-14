@@ -21,7 +21,7 @@ const AbableAppoinment = ({selected}) => {
 
         </div>
 
-       {mosdelvalue && <AppinmentModal selected={selected} mosdelvalue={mosdelvalue}/>}
+       {mosdelvalue && <AppinmentModal selected={selected} setmosdelvalue={setmosdelvalue} mosdelvalue={mosdelvalue}/>}
         </div>
     );
 };

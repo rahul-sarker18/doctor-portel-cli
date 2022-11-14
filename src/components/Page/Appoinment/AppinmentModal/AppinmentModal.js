@@ -1,9 +1,27 @@
 import React from "react";
 import { format } from "date-fns";
 
-const AppinmentModal = ({ mosdelvalue, selected }) => {
+const AppinmentModal = ({ mosdelvalue,setmosdelvalue, selected }) => {
   const { name, slots } = mosdelvalue;
   const date = format(selected, "PP");
+
+  const handelsubmite = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const slot = form.slot.value;
+    const name = form.name.value;
+    const email = form.email.value;
+    const phone = form.phone.value;
+    const booking = {
+      name,
+      email,
+      phone,
+      slot,
+      date,
+    };
+    console.log(booking);
+    setmosdelvalue(null)
+  };
 
   return (
     <>
@@ -19,7 +37,7 @@ const AppinmentModal = ({ mosdelvalue, selected }) => {
           <h3 className="text-lg font-bold">{name}</h3>
 
           {/* form start */}
-          <form className="block">
+          <form onSubmit={handelsubmite} className="block">
             <label>
               <input
                 className="p-2 rounded-xl my-3 w-full border-2 border-sky-500 block"
@@ -29,7 +47,10 @@ const AppinmentModal = ({ mosdelvalue, selected }) => {
               />
             </label>
             <label>
-              <select className="select select-borderedp-2 rounded-xl my-3 w-full border-2 border-sky-500">
+              <select
+                name="slot"
+                className="select select-borderedp-2 rounded-xl my-3 w-full border-2 border-sky-500"
+              >
                 {slots.map((slots) => (
                   <option value={slots}>{slots}</option>
                 ))}
@@ -45,7 +66,7 @@ const AppinmentModal = ({ mosdelvalue, selected }) => {
             </label>
             <label>
               <input
-                name="phonenumber"
+                name="phone"
                 placeholder="phone-number"
                 className="p-2 rounded-xl my-3 w-full border-2 border-sky-500 block"
                 type="number"
