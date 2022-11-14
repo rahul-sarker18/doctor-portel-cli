@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../Context/UserContex";
@@ -7,7 +7,7 @@ import { AuthContext } from "../../Context/UserContex";
 const Signup = () => {
   const { register , handleSubmit , formState:{errors} } = useForm();
 const {signupemail , updatename} = useContext(AuthContext)
-
+const [loginError, setLoginError] = useState("");
 
 // submit function
 
@@ -15,12 +15,13 @@ const signupbtn = value =>{
     console.log(value);
     signupemail(value.email , value.password)
     .then(result => {
+        setLoginError('')
       const user = result.user;
       console.log(user);
-      updatename(value.name)
-      
+      updatename(value.name);
     })
     .catch(error => {
+        setLoginError(error.message)
         console.error(error);
     })
 } 
@@ -78,6 +79,9 @@ const signupbtn = value =>{
             value="Signup"
             type="submit"
           />
+           <div>
+            {loginError && <p className="text-red-600">{loginError}</p>}
+          </div>
         </form>
         <p>
           have an account{" "}

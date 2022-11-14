@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../Context/UserContex";
 
 const Navebar = () => {
+  const { user, signoutff } = useContext(AuthContext);
+
+  const handelsignout = () => {
+    signoutff()
+      .then(() => {})
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   // nan items
   const navitms = (
     <>
@@ -18,9 +29,23 @@ const Navebar = () => {
         <Link to="/reviews">Reviews</Link>
       </li>
       <li>
-        <Link to="/contactUs">Contact Us</Link>
-        <Link to="/login">Login</Link>
+        <Link to="/dasbord">DasBord</Link>
       </li>
+
+      <li>
+        <Link to="/contactUs">Contact Us</Link>
+      </li>
+      {user?.uid ? (
+        <>
+          <li onClick={handelsignout}>
+            <Link>Sign out</Link>
+          </li>
+        </>
+      ) : (
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+      )}
     </>
   );
   return (

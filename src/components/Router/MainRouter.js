@@ -3,6 +3,7 @@ import Main from "../Layout/Main";
 import Appoinment from "../Page/Appoinment/Appoinment/Appoinment";
 import Login from "../Page/Authencation/Login";
 import Signup from "../Page/Authencation/Signup";
+import DasBord from "../Page/DasBord/DasBord/DasBord";
 import Home from "../Page/Home/Home/Home";
 
 export const router = createBrowserRouter([
@@ -13,5 +14,6 @@ export const router = createBrowserRouter([
         {path:'/appoinment' , element:<Appoinment/>},
         {path:'/signup' , element:<Signup/>},
         {path:'/home' , element:<Home/>},
-    ]}
+    ]},
+    {path:'/dasbord' , element:<DasBord/>},
 ])
