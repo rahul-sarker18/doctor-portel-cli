@@ -15,19 +15,23 @@ const auth = getAuth(app);
 
 const UserContex = ({ children }) => {
   const [user, setuser] = useState(null);
+  const [loding , setloding] = useState(true);
   const provider = new GoogleAuthProvider();
 
   const signupemail = (email, password) => {
+    setloding(true)
     return createUserWithEmailAndPassword(auth, email, password);
   };
   //update
   const updatename = (name) => {
+    setloding(true)
     return updateProfile(auth.currentUser, {
       displayName: name,
     });
   };
   //log in
   const loginemail = (email, password) => {
+    setloding(true)
     return signInWithEmailAndPassword(auth, email, password);
   };
   // usre get
@@ -35,6 +39,7 @@ const UserContex = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (createuser) => {
       setuser(createuser);
+      setloding(false)
     });
     return () => {
       unsubscribe();
@@ -48,6 +53,7 @@ const UserContex = ({ children }) => {
 
   const authinfo = {
     user,
+    loding,
     signoutff,
     signupemail,
     updatename,

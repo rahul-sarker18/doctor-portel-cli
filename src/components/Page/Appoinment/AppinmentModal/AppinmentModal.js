@@ -1,26 +1,48 @@
-import React from "react";
+import React, { useContext } from "react";
 import { format } from "date-fns";
+import { AuthContext } from "../../../Context/UserContex";
+import toast from "react-hot-toast";
 
-const AppinmentModal = ({ mosdelvalue,setmosdelvalue, selected }) => {
-  const { name, slots } = mosdelvalue;
+const AppinmentModal = ({ mosdelvalue, setmosdelvalue, selected , refetch }) => {
+  const { user } = useContext(AuthContext);
+  const { name, slots, _id } = mosdelvalue;
   const date = format(selected, "PP");
+
 
   const handelsubmite = (event) => {
     event.preventDefault();
     const form = event.target;
     const slot = form.slot.value;
-    const name = form.name.value;
+    const username = form.name.value;
     const email = form.email.value;
     const phone = form.phone.value;
-    const booking = {
-      name,
-      email,
-      phone,
-      slot,
-      date,
-    };
+    const booking = { id: _id, name, username, email, phone, slot, date};
     console.log(booking);
-    setmosdelvalue(null)
+
+    fetch("http://localhost:5000/bokings", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(booking),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        
+        if(data.acknowledged){
+          toast.success('congratuation !!')
+          refetch()
+          setmosdelvalue(null);
+        }
+        else{
+          toast.error(data.message)
+          setmosdelvalue(null);
+        }
+        
+      });
+      
+     
+   
   };
 
   return (
@@ -43,7 +65,7 @@ const AppinmentModal = ({ mosdelvalue,setmosdelvalue, selected }) => {
                 className="p-2 rounded-xl my-3 w-full border-2 border-sky-500 block"
                 type="text"
                 disabled
-                Value={date}
+                defaultValue={date}
               />
             </label>
             <label>
@@ -51,17 +73,31 @@ const AppinmentModal = ({ mosdelvalue,setmosdelvalue, selected }) => {
                 name="slot"
                 className="select select-borderedp-2 rounded-xl my-3 w-full border-2 border-sky-500"
               >
-                {slots.map((slots) => (
-                  <option value={slots}>{slots}</option>
+                {slots.map((slots, index) => (
+                  <option key={index} value={slots}>
+                    {slots}
+                  </option>
                 ))}
               </select>
             </label>
             <label>
               <input
                 name="name"
+                defaultValue={user?.displayName}
+                disabled
                 placeholder="full name"
                 className="p-2 rounded-xl my-3 w-full border-2 border-sky-500 block"
                 type="text"
+              />
+            </label>
+            <label>
+              <input
+                name="email"
+                defaultValue={user?.email}
+                disabled
+                placeholder="email"
+                className=" p-2 rounded-xl my-3 w-full border-2 border-sky-500 block"
+                type="email"
               />
             </label>
             <label>
@@ -72,14 +108,7 @@ const AppinmentModal = ({ mosdelvalue,setmosdelvalue, selected }) => {
                 type="number"
               />
             </label>
-            <label>
-              <input
-                name="email"
-                placeholder="email"
-                className=" p-2 rounded-xl my-3 w-full border-2 border-sky-500 block"
-                type="email"
-              />
-            </label>
+
             <button className="btn btn-success w-full">submite</button>
           </form>
         </div>

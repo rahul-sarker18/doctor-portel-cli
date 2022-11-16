@@ -81,7 +81,7 @@ const signupbtn = value =>{
           />
            <div>
             {loginError && <p className="text-red-600">{loginError}</p>}
-          </div>
+          </div> 
         </form>
         <p>
           have an account{" "}
