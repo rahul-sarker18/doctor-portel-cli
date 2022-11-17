@@ -60,6 +60,14 @@ const Navebar = () => {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal p-0">{navitms}</ul>
         </div>
+        <div>
+          <label
+            htmlFor="my-drawer-2"
+            className="btn btn-primary drawer-button lg:hidden"
+          >
+            Open DasBord
+          </label>
+        </div>
 
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">

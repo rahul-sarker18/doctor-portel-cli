@@ -48,6 +48,7 @@ const UserContex = ({ children }) => {
 
   //sign out
   const signoutff =()=>{
+    localStorage.removeItem('token')
     return signOut(auth)
   }
 

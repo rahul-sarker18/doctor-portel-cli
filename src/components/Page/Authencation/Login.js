@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/UserContex";
+import useToken from "../../Houcks/useToken";
 
 const Login = () => {
   const {
@@ -10,27 +11,70 @@ const Login = () => {
     handleSubmit,
   } = useForm();
   const [loginError, setLoginError] = useState("");
-  const {loginemail} = useContext(AuthContext);
-
+  const { loginemail } = useContext(AuthContext);
+  // const [loginUserEmail, setLoginUserEmail] = useState('');
+  // const [token] = useToken(loginUserEmail);
   const location = useLocation();
   const navegate = useNavigate();
   const from = location.state?.from?.pathname || "/";
 
+  // console.log(object);
 
-  const handleLogin = (data) => {
-    console.log(data);
-    loginemail(data.email , data.password)
-    .then(result => {
-      setLoginError('');
-      const user = result.user;
-      console.log(user);
-      navegate( from , {replace:true})
-    })
-    .catch(e =>{
-      setLoginError(e.message)
-      console.log(e);
-    })
+ 
+//   if (token) {
+//     navegate(from, { replace: true });
+// }
+
+  // const handleLogin = (data) => {
+  
+  //   loginemail(data.email, data.password)
+  //     .then((result) => {
+  //       setLoginError("");
+  //       const user = result.user;
+  //       console.log(user);
+  //       setLoginUserEmail(data.email);
+
+  //     })
+  //     .catch((e) => {
+  //       setLoginError(e.message);
+  //       console.log(e);
+  //     });
+  // };
+
+
+
+  const handleLogin = (value) => {
+    console.log(value);
+    loginemail(value.email, value.password)
+      .then((result) => {
+        setLoginError("");
+        const user = result.user;
+        console.log(user);
+        tokenfunction(user.email)
+        navegate(from, { replace: true });
+        // setLoginUserEmail(value.email)
+      })
+      .catch((error) => {
+        setLoginError(error.message);
+        console.error(error);
+      });
   };
+
+
+   //joot token
+
+   const tokenfunction = (email) => {
+    fetch(`http://localhost:5000/jwt?email=${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('data 70'  , data);
+        if (data.accesstoken) {
+          localStorage.setItem("token", data.accesstoken);
+          navegate("/");
+        }
+      });
+  };
+
 
   return (
     <div className="h-[800px] flex justify-center items-center">
@@ -43,7 +87,7 @@ const Login = () => {
               <span className="label-text">Email</span>
             </label>
             <input
-               type="email"
+              type="email"
               {...register("email", {
                 required: "Email Address is required",
               })}
